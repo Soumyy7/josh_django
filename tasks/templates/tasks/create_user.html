@@ -1,0 +1,7 @@
+<h1>Create a User</h1>
+<form method="POST">
+  {% csrf_token %} {{ form.as_p }}
+  <!-- Auto renders all fields -->
+  <button type="submit">Create User</button>
+</form>
+<a href="{% url 'all-tasks' %}">Back to Tasks</a>

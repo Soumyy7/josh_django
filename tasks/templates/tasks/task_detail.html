@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ task.name }} - Task Details</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f7fc;
+        margin: 20px;
+        color: #333;
+      }
+
+      h1 {
+        text-align: center;
+        color: #4caf50;
+        font-size: 2.5em;
+        margin-bottom: 30px;
+      }
+
+      p {
+        font-size: 1.1em;
+        line-height: 1.6;
+        color: #555;
+      }
+
+      strong {
+        color: #0073e6;
+      }
+
+      .task-details {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 25px;
+        margin: 20px auto;
+        max-width: 800px;
+      }
+
+      .task-details p {
+        margin-bottom: 15px;
+      }
+
+      .status {
+        font-weight: bold;
+        padding: 5px 15px;
+        border-radius: 20px;
+        display: inline-block;
+      }
+
+      .status.pending {
+        background-color: #ff9800;
+        color: white;
+      }
+
+      .status.in-progress {
+        background-color: #2196f3;
+        color: white;
+      }
+
+      .status.completed {
+        background-color: #4caf50;
+        color: white;
+      }
+
+      .assigned-users {
+        margin-left: 10px;
+        font-style: italic;
+        color: #555;
+      }
+
+      a.back-link {
+        display: inline-block;
+        background-color: #0073e6;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 30px;
+        text-align: center;
+      }
+
+      a.back-link:hover {
+        background-color: #005bb5;
+      }
+
+      a.user-link {
+        color: #0073e6;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Task Details</h1>
+    <div class="task-details">
+      <p><strong>Name:</strong> {{ task.name }}</p>
+      <p><strong>Description:</strong> {{ task.description }}</p>
+      <p><strong>Created At:</strong> {{ task.created_at }}</p>
+      <p>
+        <strong>Status:</strong>
+        <span
+          class="status {% if task.status == 'Pending' %}pending{% elif task.status == 'In Progress' %}in-progress{% else %}completed{% endif %}"
+          >{{ task.status }}</span
+        >
+      </p>
+
+      <!-- Display WIP or Completed At based on the task's completion -->
+      <p>
+        <strong>Completed At:</strong>
+        {% if task.completed_at %} {{ task.completed_at }} {% else %} Work in
+        Progress {% endif %}
+      </p>
+
+      <p><strong>Task Type:</strong> {{ task.task_type }}</p>
+
+      <p>
+        <strong>Assigned Users:</strong>
+        {% for user in task.assigned_users.all %}
+        <a class="user-link" href="/tasks/user/{{ user.username }}/"
+          >{{ user.username }}</a
+        >{% if not forloop.last %}, {% endif %} {% empty %} None {% endfor %}
+      </p>
+
+      <a class="back-link" href="{% url 'all-tasks' %}">Back to Tasks</a>
+    </div>
+  </body>
+</html>

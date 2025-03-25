@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>All Tasks</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 20px;
+      }
+      h1 {
+        text-align: center;
+        color: #4caf50;
+        font-size: 2.5em;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      li {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        margin: 10px 0;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .task-left {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        width: 100%;
+      }
+
+      .task-details {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .assign-form {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        margin-right: 10px; /* Adds spacing between assign form and task info */
+      }
+
+      .task-info {
+        text-align: right;
+        font-size: 1em;
+        color: #777;
+        padding-left: 10px; /* Adds padding between task type/date and assign button */
+      }
+
+      .task-left a {
+        font-size: 1.2em;
+        color: #0073e6;
+        text-decoration: none;
+      }
+      .assigned-users {
+        font-style: italic;
+        color: #555;
+      }
+
+      .task-type {
+        font-weight: bold;
+      }
+      .task-date {
+        font-size: 1em;
+      }
+
+      .buttons {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 10px 15px;
+        background-color: #0073e6;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 1em;
+        margin: 10px;
+        text-align: center;
+      }
+
+      .btn:hover {
+        background-color: #005bb5;
+      }
+
+      select,
+      button {
+        padding: 5px;
+        font-size: 0.9em;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>All Tasks</h1>
+    <div class="buttons">
+      <a href="{% url 'create-task-form' %}" class="btn">Create Task</a>
+    </div>
+    <ul>
+      {% for task in tasks %}
+      <li>
+        <div class="task-left">
+          <div class="task-details">
+            <a href="{% url 'task-detail' task.name %}">
+              <strong>{{ task.name }}</strong> - {{ task.status }}
+            </a>
+            <div class="assigned-users">
+              Assigned to: {% for user in task.assigned_users.all %}
+              <a href="/tasks/user/{{ user.username }}/" style="color: #0073e6">
+                {{ user.username }}
+              </a>
+              {% if not forloop.last %}, {% endif %} {% empty %} No users
+              assigned {% endfor %}
+            </div>
+          </div>
+
+          <!-- Assign User Form -->
+          <form
+            method="POST"
+            action="{% url 'assign-task-form' %}"
+            class="assign-form"
+          >
+            {% csrf_token %}
+            <input type="hidden" name="task_id" value="{{ task.id }}" />
+            <select name="user_id" required>
+              <option value="" disabled selected>User</option>
+              {% for user in users %}
+              <option value="{{ user.id }}">{{ user.username }}</option>
+              {% endfor %}
+            </select>
+            <button type="submit">Assign</button>
+          </form>
+        </div>
+
+        <div class="task-info">
+          <div class="task-type">{{ task.task_type }}</div>
+          <div class="task-date">{{ task.created_at|date:"d/m/Y" }}</div>
+        </div>
+      </li>
+
+      {% endfor %}
+    </ul>
+  </body>
+</html>

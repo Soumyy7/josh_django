@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ user.username }}'s Tasks</title>
+    <style>
+      a {
+        text-decoration: none;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f7fc;
+        margin: 20px;
+        color: #333;
+      }
+
+      h1 {
+        text-align: center;
+        color: #4caf50;
+        font-size: 2.5em;
+        margin-bottom: 30px;
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      li {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        margin: 10px 0;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      li:hover {
+        background-color: #f1f1f1;
+      }
+
+      .task-name {
+        font-size: 1.2em;
+        color: #0073e6;
+      }
+
+      .task-status {
+        font-style: italic;
+        color: #555;
+      }
+
+      .no-tasks {
+        font-size: 1.2em;
+        text-align: center;
+        color: #ff5722;
+        margin-top: 20px;
+      }
+
+      .back-link {
+        display: inline-block;
+        background-color: #0073e6;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 30px;
+        text-align: center;
+      }
+
+      .back-link:hover {
+        background-color: #005bb5;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Tasks for {{ user.username }}</h1>
+
+    <ul>
+      {% for task in tasks %}
+      <li>
+        <div>
+          <span class="task-name">
+            <a href="{% url 'task-detail' task.name %}">{{ task.name }}</a>
+          </span>
+          - <span class="task-status">{{ task.status }}</span>
+        </div>
+      </li>
+      {% empty %}
+      <p class="no-tasks">No tasks assigned.</p>
+      {% endfor %}
+    </ul>
+
+    <a href="{% url 'all-tasks' %}" class="back-link">Back to All Tasks</a>
+  </body>
+</html>
