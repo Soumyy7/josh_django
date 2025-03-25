@@ -21,6 +21,8 @@ git clone https://github.com/Soumyy7/josh_django.git
 cd task-management
 ```
 
+ ### Or download the zip file, extract the files, open the repository in VS Code or any other editor and follow the below given steps
+
 ### 2. Create and Activate Virtual Environment
 ```bash
 python -m venv venv
